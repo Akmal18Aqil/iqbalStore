@@ -13,6 +13,10 @@ export default async function Home() {
     .eq("is_active", true)
     .limit(4);
 
+  const { data: categories } = await supabase
+    .from("categories")
+    .select("*");
+
   // SEO Structur Data (JSON-LD) for Homepage
   const websiteSchema = {
     "@context": "https://schema.org",
@@ -271,89 +275,44 @@ export default async function Home() {
             gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
             gap: "2rem"
           }}>
-            {/* Category 1 */}
-            <Link href="/katalog" className="hover-lift" style={{
-              position: "relative",
-              height: "220px",
-              borderRadius: "var(--radius-md)",
-              overflow: "hidden",
-              boxShadow: "var(--shadow-md)",
-              display: "flex",
-              alignItems: "flex-end",
-              padding: "1.5rem"
-            }}>
-              <div style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                background: "linear-gradient(135deg, rgba(16, 185, 129, 0.4) 0%, rgba(9, 79, 43, 0.9) 100%)",
-                zIndex: 0
-              }}></div>
-              <div style={{ zIndex: 1, color: "white" }}>
-                <h3 style={{ fontSize: "1.5rem", fontWeight: 800 }}>FASHION</h3>
-                <p style={{ fontSize: "0.875rem", opacity: 0.85, display: "flex", alignItems: "center", gap: "0.25rem" }}>
-                  Lihat Koleksi <ArrowRight size={14} />
-                </p>
-              </div>
-            </Link>
+            {categories && categories.map((cat, index) => {
+              const gradients = [
+                "linear-gradient(135deg, rgba(16, 185, 129, 0.4) 0%, rgba(9, 79, 43, 0.9) 100%)", // Emerald
+                "linear-gradient(135deg, rgba(99, 102, 241, 0.4) 0%, rgba(49, 46, 129, 0.9) 100%)", // Indigo
+                "linear-gradient(135deg, rgba(236, 72, 153, 0.4) 0%, rgba(131, 24, 67, 0.9) 100%)", // Pink/Rose
+                "linear-gradient(135deg, rgba(245, 158, 11, 0.4) 0%, rgba(146, 64, 14, 0.9) 100%)", // Amber/Gold
+              ];
+              const gradient = gradients[index % gradients.length];
 
-            {/* Category 2 */}
-            <Link href="/katalog" className="hover-lift" style={{
-              position: "relative",
-              height: "220px",
-              borderRadius: "var(--radius-md)",
-              overflow: "hidden",
-              boxShadow: "var(--shadow-md)",
-              display: "flex",
-              alignItems: "flex-end",
-              padding: "1.5rem"
-            }}>
-              <div style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.4) 0%, rgba(49, 46, 129, 0.9) 100%)",
-                zIndex: 0
-              }}></div>
-              <div style={{ zIndex: 1, color: "white" }}>
-                <h3 style={{ fontSize: "1.5rem", fontWeight: 800 }}>AKSESORIS</h3>
-                <p style={{ fontSize: "0.875rem", opacity: 0.85, display: "flex", alignItems: "center", gap: "0.25rem" }}>
-                  Lihat Koleksi <ArrowRight size={14} />
-                </p>
-              </div>
-            </Link>
-
-            {/* Category 3 */}
-            <Link href="/katalog" className="hover-lift" style={{
-              position: "relative",
-              height: "220px",
-              borderRadius: "var(--radius-md)",
-              overflow: "hidden",
-              boxShadow: "var(--shadow-md)",
-              display: "flex",
-              alignItems: "flex-end",
-              padding: "1.5rem"
-            }}>
-              <div style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                background: "linear-gradient(135deg, rgba(236, 72, 153, 0.4) 0%, rgba(131, 24, 67, 0.9) 100%)",
-                zIndex: 0
-              }}></div>
-              <div style={{ zIndex: 1, color: "white" }}>
-                <h3 style={{ fontSize: "1.5rem", fontWeight: 800 }}>LIFESTYLE</h3>
-                <p style={{ fontSize: "0.875rem", opacity: 0.85, display: "flex", alignItems: "center", gap: "0.25rem" }}>
-                  Lihat Koleksi <ArrowRight size={14} />
-                </p>
-              </div>
-            </Link>
+              return (
+                <Link href={`/katalog?kategori=${cat.id}`} key={cat.id} className="hover-lift" style={{
+                  position: "relative",
+                  height: "220px",
+                  borderRadius: "var(--radius-md)",
+                  overflow: "hidden",
+                  boxShadow: "var(--shadow-md)",
+                  display: "flex",
+                  alignItems: "flex-end",
+                  padding: "1.5rem"
+                }}>
+                  <div style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    background: gradient,
+                    zIndex: 0
+                  }}></div>
+                  <div style={{ zIndex: 1, color: "white" }}>
+                    <h3 style={{ fontSize: "1.5rem", fontWeight: 800, textTransform: "uppercase" }}>{cat.name}</h3>
+                    <p style={{ fontSize: "0.875rem", opacity: 0.85, display: "flex", alignItems: "center", gap: "0.25rem" }}>
+                      Lihat Koleksi <ArrowRight size={14} />
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -481,11 +440,7 @@ export default async function Home() {
             <p style={{ color: "var(--gray-500)", marginTop: "0.5rem" }}>Apa kata pelanggan setia mengenai pengalaman berbelanja di TokoKita</p>
           </div>
 
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "2rem"
-          }}>
+          <div className="testimonial-grid">
             {/* Review 1 */}
             <div style={{
               backgroundColor: "var(--card)",
@@ -493,7 +448,7 @@ export default async function Home() {
               borderRadius: "var(--radius-md)",
               padding: "2rem",
               boxShadow: "var(--shadow-sm)"
-            }} className="hover-lift">
+            }} className="hover-lift testimonial-card">
               <div style={{ display: "flex", gap: "0.25rem", color: "hsl(45, 100%, 50%)", marginBottom: "1rem" }}>
                 <Star size={16} fill="currentColor" />
                 <Star size={16} fill="currentColor" />
@@ -533,7 +488,7 @@ export default async function Home() {
               borderRadius: "var(--radius-md)",
               padding: "2rem",
               boxShadow: "var(--shadow-sm)"
-            }} className="hover-lift">
+            }} className="hover-lift testimonial-card">
               <div style={{ display: "flex", gap: "0.25rem", color: "hsl(45, 100%, 50%)", marginBottom: "1rem" }}>
                 <Star size={16} fill="currentColor" />
                 <Star size={16} fill="currentColor" />
@@ -573,7 +528,7 @@ export default async function Home() {
               borderRadius: "var(--radius-md)",
               padding: "2rem",
               boxShadow: "var(--shadow-sm)"
-            }} className="hover-lift">
+            }} className="hover-lift testimonial-card">
               <div style={{ display: "flex", gap: "0.25rem", color: "hsl(45, 100%, 50%)", marginBottom: "1rem" }}>
                 <Star size={16} fill="currentColor" />
                 <Star size={16} fill="currentColor" />

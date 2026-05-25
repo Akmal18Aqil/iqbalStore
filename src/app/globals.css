@@ -356,3 +356,33 @@ button {
 .mt-4 { margin-top: 1rem; }
 .mb-4 { margin-bottom: 1rem; }
 .my-8 { margin-top: 2rem; margin-bottom: 2rem; }
+
+/* Testimonial Responsive Carousel Snap */
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .testimonial-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap: 1.5rem;
+    padding: 1rem 0.25rem 2rem;
+    margin: 0 -1.25rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    scrollbar-width: none; /* Firefox */
+  }
+  .testimonial-grid::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+  .testimonial-card {
+    scroll-snap-align: center;
+    flex: 0 0 85%;
+    width: 85%;
+  }
+}

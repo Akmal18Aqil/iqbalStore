@@ -91,7 +91,7 @@ export default function ProductFormPage({ searchParams }: { searchParams: Promis
       <div className="admin-card">
         <form onSubmit={handleSubmit}>
           
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+          <div className="admin-grid-2">
             <div className="admin-input-group">
               <label className="admin-label">Nama Produk <span style={{color: "var(--admin-primary)"}}>*</span></label>
               <input 
@@ -134,7 +134,7 @@ export default function ProductFormPage({ searchParams }: { searchParams: Promis
             </select>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+          <div className="admin-grid-2">
             <div className="admin-input-group">
               <label className="admin-label">Harga (Rp) <span style={{color: "var(--admin-primary)"}}>*</span></label>
               <input 
